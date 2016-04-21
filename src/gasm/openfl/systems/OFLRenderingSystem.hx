@@ -15,6 +15,7 @@ import gasm.openfl.components.OFLTextComponent;
  * ...
  * @author Leo Bergman
  */
+using gasm.core.utils.BitUtils;
 
 class OFLRenderingSystem extends System implements ISystem
 {

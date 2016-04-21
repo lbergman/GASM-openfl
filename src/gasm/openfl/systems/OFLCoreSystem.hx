@@ -9,6 +9,8 @@ import openfl.display.DisplayObjectContainer;
 
 // Autoremoved by FD if organizing imports
 import gasm.core.enums.ComponentType;
+using gasm.core.utils.BitUtils;
+
 /**
  * ...
  * @author Leo Bergman
