@@ -9,8 +9,6 @@ import openfl.display.DisplayObjectContainer;
 
 // Autoremoved by FD if organizing imports
 import gasm.core.enums.ComponentType;
-using gasm.core.utils.BitUtils;
-
 /**
  * ...
  * @author Leo Bergman
@@ -23,8 +21,8 @@ class OFLCoreSystem extends System implements ISystem
 	public function new(root:DisplayObjectContainer)
 	{
 		this.root = root;
-		type = type.add(SystemType.CORE);
-		componentFlags = componentFlags.add(GraphicsModel);
+		type = SystemType.CORE;
+		componentFlags.set(GraphicsModel);
 	}
 	
 	public function update(comp:Component, delta:Float) 
@@ -40,9 +38,12 @@ class OFLCoreSystem extends System implements ISystem
 			var model:SpriteModelComponent = cast comp;
 			model.stageMouseX = root.stage.mouseX;
 			model.stageMouseY = root.stage.mouseY;
-			var sp = model.owner.get(OFLSpriteComponent).sprite;
-			model.mouseX = sp.mouseX;
-			model.mouseY = sp.mouseY;
+			var spriteComponent = model.owner.get(OFLSpriteComponent);
+			if(spriteComponent != null) {
+				var sp = spriteComponent.sprite;
+				model.mouseX = sp.mouseX;
+				model.mouseY = sp.mouseY;
+			}
 		}
 	}
 }
