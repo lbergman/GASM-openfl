@@ -20,6 +20,7 @@ class OFLRenderingSystem extends System implements ISystem
 	
 	public function new(root:DisplayObjectContainer)
 	{
+		super();
 		this.root = root;
 		type = SystemType.RENDERING;
 		componentFlags.set(ComponentType.Graphics);

@@ -12,7 +12,11 @@
 		"leo.bergman"
 	],
 	"releasenote": "See https://github.com/lbergman/gasm-openfl/blob/master/doc/changes.md",
-	"version": "0.0.1.0",
+	"version": "0.0.1",
 	"url": "https://github.com/lbergman/gasm-openfl",
-	"dependencies": {}
+	"dependencies": {
+		"buddy":"",
+		"gasm":"",
+		"openfl":""
+	}
 }

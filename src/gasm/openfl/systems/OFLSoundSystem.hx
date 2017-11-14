@@ -15,6 +15,7 @@ class OFLSoundSystem extends System implements ISystem
 	
 	public function new() 
 	{
+		super();
 		type = SystemType.SOUND;
 		componentFlags.set(ComponentType.Sound);
 	}

@@ -1,5 +1,5 @@
 package gasm.openfl;
-import gasm.core.components.SpriteModelComponent;
+import gasm.core.IEngine;
 import gasm.core.ISystem;
 import gasm.openfl.components.OFLSpriteComponent;
 import gasm.openfl.systems.OFLCoreSystem;
@@ -22,18 +22,17 @@ class OFLContext extends Sprite implements Context
 	public var baseEntity(get, null):Entity;
 	public var systems(default, null):Array<ISystem>;
 	
-	var _engine:Engine;
+	var _engine:IEngine;
 	
-	public function new() 
+	public function new(?core:ISystem, ?renderer:ISystem, ?sound:ISystem, ?engine:IEngine) 
 	{
 		super();
-		
-		var core = new OFLCoreSystem(this);
-		var renderer = new OFLRenderingSystem(this);
-		var sound = new OFLSoundSystem();
+		core = core != null ? core : new OFLCoreSystem(this);
+		renderer = renderer != null ? renderer : new OFLRenderingSystem(this);
+		sound = sound != null ? sound : new OFLSoundSystem();
 		systems = [core, renderer, sound];
 		
-		_engine = new Engine(systems);
+		_engine = engine != null ? engine : new Engine(systems);
 		
 		if (stage == null)
 		{

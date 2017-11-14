@@ -1,7 +1,6 @@
 package gasm.openfl.components;
 import gasm.core.components.SpriteModelComponent;
-import gasm.core.events.OverEvent;
-import gasm.core.events.PressEvent;
+import gasm.core.events.InteractionEvent;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import gasm.core.Component;
@@ -35,17 +34,19 @@ class OFLSpriteComponent extends Component
 		}
 		sprite.addEventListener(MouseEvent.CLICK, function(e:MouseEvent)
 		{
-			if(model.pressHandler != null)
+			
+			/*
+			if(model.pressHandlers != null)
 			{
-				model.pressHandler(new PressEvent( { x:sprite.mouseX, y:sprite.mouseY }, owner));
-			}
+				model.pressHandlers(new InteractionEvent( { x:sprite.mouseX, y:sprite.mouseY }, owner));
+			}*/
 		});
 		sprite.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent)
 		{
-			if(model.overHandler != null)
+			/*if(model.overHandler != null)
 			{
-				model.overHandler(new OverEvent( { x:sprite.mouseX, y:sprite.mouseY }, owner));
-			}
+				model.overHandler(new InteractionEvent( { x:sprite.mouseX, y:sprite.mouseY }, owner));
+			}*/
 		});
 	}
 	

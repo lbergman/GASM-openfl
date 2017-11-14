@@ -1,0 +1,10 @@
+-main TestMain
+-cp src
+-cp test
+-lib buddy
+-lib gasm
+-lib openfl
+-lib lime
+-D travis
+-D buddy-colors
+# -D lime-cffi
