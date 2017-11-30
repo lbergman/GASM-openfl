@@ -17,55 +17,47 @@ import gasm.openfl.systems.OFLSoundSystem;
  * ...
  * @author Leo Bergman
  */
-class OFLContext extends Sprite implements Context
-{
-	public var baseEntity(get, null):Entity;
-	public var systems(default, null):Array<ISystem>;
-	
-	var _engine:IEngine;
-	
-	public function new(?core:ISystem, ?renderer:ISystem, ?sound:ISystem, ?engine:IEngine) 
-	{
-		super();
-		core = core != null ? core : new OFLCoreSystem(this);
-		renderer = renderer != null ? renderer : new OFLRenderingSystem(this);
-		sound = sound != null ? sound : new OFLSoundSystem();
-		systems = [core, renderer, sound];
-		
-		_engine = engine != null ? engine : new Engine(systems);
-		
-		if (stage == null)
-		{
-			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-		}
-		else
-		{
-			init();
-		}
-	}
-	
-	function onEnterFrame(e:Event):Void 
-	{
-		_engine.tick();
-	}
-	
-	function onAddedToStage(e:Event) 
-	{
-		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-		init();
-	}
-	
-	function init() 
-	{
-		
-		baseEntity.add(new OFLSpriteComponent(this, true, true));
-		
-		addEventListener(Event.ENTER_FRAME, onEnterFrame);
-	}
-	
-	public function get_baseEntity():Entity
-	{
-		return _engine.baseEntity;
-	}
-	
+class OFLContext extends Sprite implements Context {
+    public var baseEntity(get, null):Entity;
+    public var systems(default, null):Array<ISystem>;
+
+    var _engine:IEngine;
+
+    public function new(?core:ISystem, ?renderer:ISystem, ?sound:ISystem, ?engine:IEngine) {
+        super();
+        core = core != null ? core : new OFLCoreSystem(this);
+        renderer = renderer != null ? renderer : new OFLRenderingSystem(this);
+        sound = sound != null ? sound : new OFLSoundSystem();
+        systems = [core, renderer, sound];
+
+        _engine = engine != null ? engine : new Engine(systems);
+
+        if (stage == null) {
+            addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+        }
+        else {
+            init();
+        }
+    }
+
+    function onEnterFrame(e:Event):Void {
+        _engine.tick();
+    }
+
+    function onAddedToStage(e:Event) {
+        removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+        init();
+    }
+
+    function init() {
+
+        baseEntity.add(new OFLSpriteComponent(this, true, true));
+
+        addEventListener(Event.ENTER_FRAME, onEnterFrame);
+    }
+
+    public function get_baseEntity():Entity {
+        return _engine.baseEntity;
+    }
+
 }
