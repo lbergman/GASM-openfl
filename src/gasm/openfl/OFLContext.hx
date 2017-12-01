@@ -51,7 +51,7 @@ class OFLContext extends Sprite implements Context {
 
     function init() {
 
-        baseEntity.add(new OFLSpriteComponent(this, true, true));
+        baseEntity.add(new OFLSpriteComponent(this, true));
 
         addEventListener(Event.ENTER_FRAME, onEnterFrame);
     }

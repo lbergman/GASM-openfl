@@ -28,9 +28,9 @@ class OFLRenderingSystem extends System implements ISystem {
     public function update(comp:Component, delta:Float) {
         if (!comp.inited) {
             if (comp.owner.parent != null) {
+                var parent:OFLSpriteComponent = comp.owner.parent.get(OFLSpriteComponent);
                 switch(comp.componentType) {
                     case Graphics:
-                        var parent = comp.owner.parent.get(OFLSpriteComponent);
                         if (parent != null && parent != comp) {
                             parent.sprite.addChild(cast(comp, OFLSpriteComponent).sprite);
                         }
@@ -38,7 +38,6 @@ class OFLRenderingSystem extends System implements ISystem {
                             root.addChild(cast(comp, OFLSpriteComponent).sprite);
                         }
                     case Text:
-                        var parent = comp.owner.parent.get(OFLSpriteComponent);
                         if (parent != null && parent != comp) {
                             parent.sprite.addChild(cast(comp, OFLTextComponent).textField);
                         }
