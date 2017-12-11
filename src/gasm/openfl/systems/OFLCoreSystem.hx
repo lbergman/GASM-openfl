@@ -29,17 +29,22 @@ class OFLCoreSystem extends System implements ISystem {
             comp.init();
             comp.inited = true;
         }
+        switch(comp.componentType) {
+            case ComponentType.GraphicsModel: updateMouseCoords(comp);
+            default: null;
+        }
         comp.update(delta);
-        if (Std.is(comp, SpriteModelComponent)) {
-            var model:SpriteModelComponent = cast comp;
-            model.stageMouseX = root.stage.mouseX;
-            model.stageMouseY = root.stage.mouseY;
-            var spriteComponent = model.owner.get(OFLSpriteComponent);
-            if (spriteComponent != null) {
-                var sp = spriteComponent.sprite;
-                model.mouseX = sp.mouseX;
-                model.mouseY = sp.mouseY;
-            }
+    }
+
+    inline private function updateMouseCoords(comp:Component) {
+        var model:SpriteModelComponent = cast comp;
+        model.stageMouseX = root.stage.mouseX;
+        model.stageMouseY = root.stage.mouseY;
+        var spriteComponent = model.owner.get(OFLSpriteComponent);
+        if (spriteComponent != null) {
+            var sp = spriteComponent.sprite;
+            model.mouseX = sp.mouseX;
+            model.mouseY = sp.mouseY;
         }
     }
 }

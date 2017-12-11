@@ -8,8 +8,6 @@ import openfl.events.Event;
 import gasm.core.Context;
 import gasm.core.Engine;
 import gasm.core.Entity;
-import gasm.core.enums.SystemType;
-import gasm.core.System;
 import gasm.openfl.systems.OFLRenderingSystem;
 import gasm.openfl.systems.OFLSoundSystem;
 
@@ -50,10 +48,10 @@ class OFLContext extends Sprite implements Context {
     }
 
     function init() {
-
-        baseEntity.add(new OFLSpriteComponent(this, true));
-
+        var comp = new OFLSpriteComponent(this);
+        baseEntity.add(comp);
         addEventListener(Event.ENTER_FRAME, onEnterFrame);
+        dispatchEvent(new Event(Event.RESIZE));
     }
 
     public function get_baseEntity():Entity {

@@ -1,7 +1,9 @@
 package gasm.openfl.systems;
+import gasm.core.math.geom.Point;
+import openfl.events.Event;
 import gasm.core.components.SpriteModelComponent;
+import gasm.core.Entity;
 import gasm.core.ISystem;
-import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import gasm.core.Component;
 import gasm.core.enums.ComponentType;
@@ -16,10 +18,16 @@ import gasm.openfl.components.OFLTextComponent;
  */
 class OFLRenderingSystem extends System implements ISystem {
     public var root(default, null):DisplayObjectContainer;
+    private var _stageSize:Point;
 
     public function new(root:DisplayObjectContainer) {
         super();
         this.root = root;
+        _stageSize = {x:0, y:0};
+        root.stage.addEventListener(Event.RESIZE, function(event:Event) {
+            _stageSize.x = root.stage.stageWidth;
+            _stageSize.y = root.stage.stageHeight;
+        });
         type = SystemType.RENDERING;
         componentFlags.set(ComponentType.Graphics);
         componentFlags.set(ComponentType.Text);
@@ -32,7 +40,8 @@ class OFLRenderingSystem extends System implements ISystem {
                 switch(comp.componentType) {
                     case Graphics:
                         if (parent != null && parent != comp) {
-                            parent.sprite.addChild(cast(comp, OFLSpriteComponent).sprite);
+                            var child = cast(comp, OFLSpriteComponent).sprite;
+                            parent.sprite.addChild(child);
                         }
                         else {
                             root.addChild(cast(comp, OFLSpriteComponent).sprite);
@@ -46,10 +55,17 @@ class OFLRenderingSystem extends System implements ISystem {
                         }
                     default:
                 }
+            } else if(Std.is(comp, OFLSpriteComponent)){
+                var spc:OFLSpriteComponent = cast comp;
+                spc.root = true;
             }
             comp.init();
             comp.inited = true;
         }
         comp.update(delta);
+        if(Std.is(comp, OFLSpriteComponent)) {
+            var smc:SpriteModelComponent = comp.owner.get(SpriteModelComponent);
+            smc.stageSize = _stageSize;
+        }
     }
 }
