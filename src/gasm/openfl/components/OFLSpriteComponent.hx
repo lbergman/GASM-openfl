@@ -91,7 +91,6 @@ class OFLSpriteComponent extends Component {
     }
 
     function onDown(event:MouseEvent) {
-        trace("sprite.name:" + sprite.name);
         _model.triggerEvent(EventType.DOWN, { x:sprite.mouseX, y:sprite.mouseY }, owner);
         startDrag();
     }
@@ -118,7 +117,6 @@ class OFLSpriteComponent extends Component {
     }
 
     function onDrag(event:IEvent) {
-        trace("sprite.name:" + sprite.name);
         _model.triggerEvent(EventType.DRAG, { x:sprite.mouseX, y:sprite.mouseY }, owner);
     }
 
