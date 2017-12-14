@@ -48,7 +48,7 @@ class OFLContext extends Sprite implements Context {
     }
 
     function init() {
-        var comp = new OFLSpriteComponent(this);
+        var comp = new OFLSpriteComponent(this, true);
         baseEntity.add(comp);
         addEventListener(Event.ENTER_FRAME, onEnterFrame);
         dispatchEvent(new Event(Event.RESIZE));

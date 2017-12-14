@@ -53,7 +53,6 @@ class OFLSpriteComponent extends Component {
         if (this.sprite.mouseEnabled) {
             addEventListeners();
         }
-        sprite.stage.addEventListener(Event.RESIZE, onResize);
     }
 
     override public function update(dt:Float) {
@@ -92,6 +91,7 @@ class OFLSpriteComponent extends Component {
     }
 
     function onDown(event:MouseEvent) {
+        trace("sprite.name:" + sprite.name);
         _model.triggerEvent(EventType.DOWN, { x:sprite.mouseX, y:sprite.mouseY }, owner);
         startDrag();
     }
@@ -118,6 +118,7 @@ class OFLSpriteComponent extends Component {
     }
 
     function onDrag(event:IEvent) {
+        trace("sprite.name:" + sprite.name);
         _model.triggerEvent(EventType.DRAG, { x:sprite.mouseX, y:sprite.mouseY }, owner);
     }
 
@@ -154,7 +155,6 @@ class OFLSpriteComponent extends Component {
         sprite.removeEventListener(MouseEvent.MOUSE_OVER, onOver);
         sprite.removeEventListener(MouseEvent.MOUSE_OUT, onOut);
         sprite.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
-        sprite.stage.removeEventListener(Event.RESIZE, onResize);
         var rootSmc:SpriteModelComponent = owner.getFromRoot(SpriteModelComponent);
         rootSmc.removeHandler(EventType.UP, onStageUp);
     }
