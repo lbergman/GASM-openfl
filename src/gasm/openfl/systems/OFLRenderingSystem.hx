@@ -1,4 +1,5 @@
 package gasm.openfl.systems;
+import openfl.Lib;
 import gasm.core.math.geom.Point;
 import openfl.events.Event;
 import gasm.core.components.SpriteModelComponent;
@@ -23,10 +24,10 @@ class OFLRenderingSystem extends System implements ISystem {
     public function new(root:DisplayObjectContainer) {
         super();
         this.root = root;
-        _stageSize = {x:0, y:0};
+        _stageSize = {x:Lib.current.stage.stageWidth, y:Lib.current.stage.stageHeight};
         root.stage.addEventListener(Event.RESIZE, function(event:Event) {
-            _stageSize.x = root.stage.stageWidth;
-            _stageSize.y = root.stage.stageHeight;
+            _stageSize.x = Lib.current.stage.stageWidth;
+            _stageSize.y = Lib.current.stage.stageHeight;
         });
         type = SystemType.RENDERING;
         componentFlags.set(ComponentType.Graphics);
@@ -34,6 +35,7 @@ class OFLRenderingSystem extends System implements ISystem {
     }
 
     public function update(comp:Component, delta:Float) {
+
         if (!comp.inited) {
             if (comp.owner.parent != null) {
                 var parent:OFLSpriteComponent = comp.owner.parent.get(OFLSpriteComponent);
@@ -63,9 +65,5 @@ class OFLRenderingSystem extends System implements ISystem {
             comp.inited = true;
         }
         comp.update(delta);
-        if(Std.is(comp, OFLSpriteComponent)) {
-            var smc:SpriteModelComponent = comp.owner.get(SpriteModelComponent);
-            smc.stageSize = _stageSize;
-        }
     }
 }

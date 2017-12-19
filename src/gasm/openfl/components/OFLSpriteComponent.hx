@@ -1,5 +1,6 @@
 package gasm.openfl.components;
 
+import openfl.Lib;
 import gasm.core.events.api.IEvent;
 import gasm.core.enums.EventType;
 import gasm.core.Component;
@@ -23,6 +24,8 @@ class OFLSpriteComponent extends Component {
     var _mouseDown = false;
     var _lastW:Float;
     var _lastH:Float;
+    var _stageSize:{x:Float, y:Float};
+    var _inited = false;
 
     public function new(sprite:DisplayObject, mouseEnabled:Bool = false) {
         if (!Std.is(sprite, DisplayObjectContainer)) {
@@ -32,6 +35,7 @@ class OFLSpriteComponent extends Component {
             this.sprite = cast(sprite, DisplayObjectContainer);
         }
         this.sprite.mouseEnabled = mouseEnabled;
+        _stageSize = {x:Lib.current.stage.stageWidth, y:Lib.current.stage.stageHeight};
         componentType = ComponentType.Graphics;
     }
 
@@ -53,12 +57,16 @@ class OFLSpriteComponent extends Component {
         if (this.sprite.mouseEnabled) {
             addEventListeners();
         }
+        onResize();
     }
 
     override public function update(dt:Float) {
         sprite.x = _model.x + _model.offsetX;
         sprite.y = _model.y + _model.offsetY;
-        sprite.visible = _model.visible;
+
+        _model.stageSize.x = Lib.current.stage.stageWidth;
+        _model.stageSize.y = Lib.current.stage.stageHeight;
+
         if (sprite.width != _lastW) {
             _model.width = sprite.width;
         }
@@ -77,12 +85,26 @@ class OFLSpriteComponent extends Component {
         if(_model.yScale != sprite.scaleY) {
             sprite.scaleY = _model.yScale;
         }
+
+        if(_model.stageSize.x != _stageSize.x
+        || _model.stageSize.y != _stageSize.y
+        || _model.width != _lastW
+        || _model.height != _lastH) {
+            onResize();
+        }
+
+        _stageSize.x = _model.stageSize.x;
+        _stageSize.y = _model.stageSize.y;
         _lastW = _model.width;
         _lastH = _model.height;
+        sprite.visible = _model.visible;
     }
 
     override public function dispose() {
-        sprite.mouseEnabled = false;
+        if(sprite.parent != null) {
+            sprite.parent.removeChild(sprite);
+        }
+        sprite.removeChildren(0, sprite.numChildren);
         removeEventListeners();
     }
 
@@ -120,8 +142,8 @@ class OFLSpriteComponent extends Component {
         _model.triggerEvent(EventType.DRAG, { x:sprite.mouseX, y:sprite.mouseY }, owner);
     }
 
-    function onResize(event:Event) {
-        _model.triggerEvent(EventType.RESIZE, { x:sprite.stage.stageWidth, y:sprite.stage.stageHeight}, owner);
+    function onResize(?event:Event) {
+        _model.triggerEvent(EventType.RESIZE, { x:_model.stageSize.x, y:_model.stageSize.y}, owner);
     }
 
     function stopDrag() {
@@ -155,6 +177,7 @@ class OFLSpriteComponent extends Component {
         sprite.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
         var rootSmc:SpriteModelComponent = owner.getFromRoot(SpriteModelComponent);
         rootSmc.removeHandler(EventType.UP, onStageUp);
+        _model.removeHandler(EventType.MOVE, onDrag);
     }
 
     function set_mouseEnabled(val:Bool):Bool {
