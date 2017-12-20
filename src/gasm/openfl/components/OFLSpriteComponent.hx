@@ -20,6 +20,8 @@ class OFLSpriteComponent extends Component {
     public var sprite(default, default):DisplayObjectContainer;
     public var mouseEnabled(default, set):Bool;
     public var root(default, default):Bool;
+    public var roundPixels(default, default):Bool;
+
     var _model:SpriteModelComponent;
     var _mouseDown = false;
     var _lastW:Float;
@@ -27,7 +29,7 @@ class OFLSpriteComponent extends Component {
     var _stageSize:{x:Float, y:Float};
     var _inited = false;
 
-    public function new(sprite:DisplayObject, mouseEnabled:Bool = false) {
+    public function new(sprite:DisplayObject, mouseEnabled:Bool = false, roundPixels:Bool = false) {
         if (!Std.is(sprite, DisplayObjectContainer)) {
             this.sprite = new Sprite();
             this.sprite.addChild(sprite);
@@ -36,6 +38,7 @@ class OFLSpriteComponent extends Component {
         }
         this.sprite.mouseEnabled = mouseEnabled;
         _stageSize = {x:Lib.current.stage.stageWidth, y:Lib.current.stage.stageHeight};
+        this.roundPixels = roundPixels;
         componentType = ComponentType.Graphics;
     }
 
@@ -84,6 +87,15 @@ class OFLSpriteComponent extends Component {
         }
         if(_model.yScale != sprite.scaleY) {
             sprite.scaleY = _model.yScale;
+        }
+
+        if(roundPixels) {
+            _model.x = Math.round(_model.x);
+            _model.y = Math.round(_model.y);
+            _model.width = Math.round(_model.width);
+            _model.height = Math.round(_model.height);
+            _model.stageSize.x = Math.round(_model.stageSize.x);
+            _model.stageSize.y = Math.round(_model.stageSize.y);
         }
 
         if(_model.stageSize.x != _stageSize.x
