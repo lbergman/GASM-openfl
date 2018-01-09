@@ -37,7 +37,6 @@ class OFLSpriteComponent extends Component {
             this.sprite = cast(sprite, DisplayObjectContainer);
         }
         this.sprite.mouseEnabled = mouseEnabled;
-        _stageSize = {x:Lib.current.stage.stageWidth, y:Lib.current.stage.stageHeight};
         this.roundPixels = roundPixels;
         componentType = ComponentType.Graphics;
     }
@@ -60,6 +59,8 @@ class OFLSpriteComponent extends Component {
         if (this.sprite.mouseEnabled) {
             addEventListeners();
         }
+        _stageSize = {x:Lib.current.stage.stageWidth, y:Lib.current.stage.stageHeight};
+
         onResize();
     }
 
