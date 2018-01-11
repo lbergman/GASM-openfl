@@ -117,6 +117,7 @@ class OFLSpriteComponent extends Component {
         if(sprite.parent != null) {
             sprite.parent.removeChild(sprite);
         }
+        stopDrag();
         sprite.removeChildren(0, sprite.numChildren);
         removeEventListeners();
     }
@@ -177,6 +178,8 @@ class OFLSpriteComponent extends Component {
         sprite.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
         var rootSmc:SpriteModelComponent = owner.getFromRoot(SpriteModelComponent);
         rootSmc.addHandler(EventType.UP, onStageUp);
+        var smc:SpriteModelComponent = owner.get(SpriteModelComponent);
+        smc.addHandler(EventType.UP, onStageUp);
     }
 
     function removeEventListeners() {
@@ -190,6 +193,8 @@ class OFLSpriteComponent extends Component {
         sprite.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
         var rootSmc:SpriteModelComponent = owner.getFromRoot(SpriteModelComponent);
         rootSmc.removeHandler(EventType.UP, onStageUp);
+        var smc:SpriteModelComponent = owner.get(SpriteModelComponent);
+        smc.removeHandler(EventType.UP, onStageUp);
         _model.removeHandler(EventType.MOVE, onDrag);
     }
 
