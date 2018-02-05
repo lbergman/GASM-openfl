@@ -1,4 +1,6 @@
 package gasm.openfl;
+
+import gasm.core.components.AppModelComponent;
 import gasm.core.IEngine;
 import gasm.core.ISystem;
 import gasm.openfl.components.OFLSpriteComponent;
@@ -18,6 +20,7 @@ import gasm.openfl.systems.OFLSoundSystem;
 class OFLContext extends Sprite implements Context {
     public var baseEntity(get, null):Entity;
     public var systems(default, null):Array<ISystem>;
+    public var appModel(default, null):AppModelComponent;
 
     var _engine:IEngine;
 
@@ -29,13 +32,16 @@ class OFLContext extends Sprite implements Context {
         systems = [core, renderer, sound];
 
         _engine = engine != null ? engine : new Engine(systems);
-
+        appModel = new AppModelComponent();
         if (stage == null) {
             addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-        }
-        else {
+        } else {
             init();
         }
+    }
+
+    function resize(width:Float, height:Float) {
+        // Override in subclass
     }
 
     function onEnterFrame(e:Event):Void {
@@ -47,11 +53,20 @@ class OFLContext extends Sprite implements Context {
         init();
     }
 
+    function onResize(?e:Event) {
+        resize(stage.stageWidth, stage.stageHeight);
+        appModel.stageSize.x = stage.stageWidth;
+        appModel.stageSize.y = stage.stageHeight;
+        appModel.resizeSignal.emit({width:stage.stageWidth, height:stage.stageHeight});
+    }
+
     function init() {
         var comp = new OFLSpriteComponent(this, true);
         baseEntity.add(comp);
+        baseEntity.add(appModel);
+        onResize();
         addEventListener(Event.ENTER_FRAME, onEnterFrame);
-        dispatchEvent(new Event(Event.RESIZE));
+        stage.addEventListener(Event.RESIZE, onResize);
     }
 
     public function get_baseEntity():Entity {

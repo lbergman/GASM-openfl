@@ -1,5 +1,6 @@
 package gasm.openfl.components;
 
+import gasm.core.math.geom.Point;
 import openfl.Lib;
 import gasm.core.events.api.IEvent;
 import gasm.core.enums.EventType;
@@ -26,8 +27,10 @@ class OFLSpriteComponent extends Component {
     var _mouseDown = false;
     var _lastW:Float;
     var _lastH:Float;
-    var _stageSize:{x:Float, y:Float};
+    var _stageSize:Point;
     var _inited = false;
+    var _origW:Float;
+    var _origH:Float;
 
     public function new(sprite:DisplayObject, mouseEnabled:Bool = false, roundPixels:Bool = false) {
         if (!Std.is(sprite, DisplayObjectContainer)) {
@@ -47,9 +50,10 @@ class OFLSpriteComponent extends Component {
 
     override public function init() {
         _model = owner.get(SpriteModelComponent);
+        _stageSize = {x:Lib.current.stage.stageWidth, y:Lib.current.stage.stageHeight};
         if (sprite.width > 0) {
-            _model.width = sprite.width;
-            _model.height = sprite.height;
+            _model.width = Math.min(sprite.width, _stageSize.x);
+            _model.height = Math.min(sprite.height, _stageSize.y);
         }
         var mask:DisplayObject = _model.mask;
         if (mask != null) {
@@ -59,8 +63,6 @@ class OFLSpriteComponent extends Component {
         if (this.sprite.mouseEnabled) {
             addEventListeners();
         }
-        _stageSize = {x:Lib.current.stage.stageWidth, y:Lib.current.stage.stageHeight};
-
         onResize();
     }
 
