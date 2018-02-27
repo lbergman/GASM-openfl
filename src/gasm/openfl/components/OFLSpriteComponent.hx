@@ -163,7 +163,9 @@ class OFLSpriteComponent extends Component {
     }
 
     function stopDrag() {
-        _model.removeHandler(EventType.MOVE, onDrag);
+        if(_model != null) {
+            _model.removeHandler(EventType.MOVE, onDrag);
+        }
     }
 
     function startDrag() {
@@ -197,7 +199,9 @@ class OFLSpriteComponent extends Component {
         rootSmc.removeHandler(EventType.UP, onStageUp);
         var smc:SpriteModelComponent = owner.get(SpriteModelComponent);
         smc.removeHandler(EventType.UP, onStageUp);
-        _model.removeHandler(EventType.MOVE, onDrag);
+        if(_model != null) {
+            _model.removeHandler(EventType.MOVE, onDrag);
+        }
     }
 
     function set_mouseEnabled(val:Bool):Bool {

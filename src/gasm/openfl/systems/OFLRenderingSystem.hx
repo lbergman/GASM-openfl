@@ -37,29 +37,35 @@ class OFLRenderingSystem extends System implements ISystem {
     public function update(comp:Component, delta:Float) {
 
         if (!comp.inited) {
+            var model:SpriteModelComponent = comp.owner.get(SpriteModelComponent);
             if (comp.owner.parent != null) {
                 var parent:OFLSpriteComponent = comp.owner.parent.get(OFLSpriteComponent);
                 switch(comp.componentType) {
                     case Graphics:
+                        var child = cast(comp, OFLSpriteComponent).sprite;
                         if (parent != null && parent != comp) {
-                            var child = cast(comp, OFLSpriteComponent).sprite;
                             parent.sprite.addChild(child);
+                        } else {
+                            root.addChild(child);
                         }
-                        else {
-                            root.addChild(cast(comp, OFLSpriteComponent).sprite);
-                        }
+                        model.origWidth = child.width;
+                        model.origHeight = child.height;
                     case Text:
+                        var child = cast(comp, OFLTextComponent).textField;
                         if (parent != null && parent != comp) {
-                            parent.sprite.addChild(cast(comp, OFLTextComponent).textField);
+                            parent.sprite.addChild(child);
+                        } else {
+                            root.addChild(child);
                         }
-                        else {
-                            root.addChild(cast(comp, OFLTextComponent).textField);
-                        }
+                        model.origWidth = child.width;
+                        model.origHeight = child.height;
                     default:
                 }
             } else if(Std.is(comp, OFLSpriteComponent)){
                 var spc:OFLSpriteComponent = cast comp;
                 spc.root = true;
+                model.origWidth = spc.sprite.width;
+                model.origHeight = spc.sprite.height;
             }
             comp.init();
             comp.inited = true;

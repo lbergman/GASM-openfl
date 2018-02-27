@@ -57,7 +57,6 @@ class OFLContext extends Sprite implements Context {
         resize(stage.stageWidth, stage.stageHeight);
         appModel.stageSize.x = stage.stageWidth;
         appModel.stageSize.y = stage.stageHeight;
-        appModel.resizeSignal.emit({width:stage.stageWidth, height:stage.stageHeight});
     }
 
     function init() {
