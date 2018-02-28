@@ -1,15 +1,14 @@
 package gasm.openfl.components;
-import flash.text.TextFormatAlign;
-import flash.text.TextFieldAutoSize;
-import gasm.core.enums.EventType;
-import openfl.events.Event;
-import openfl.Lib;
-import gasm.core.data.TextConfig;
+
 import gasm.core.Component;
 import gasm.core.components.TextModelComponent;
+import gasm.core.data.TextConfig;
 import gasm.core.enums.ComponentType;
+import gasm.core.enums.EventType;
+import gasm.openfl.text.ScalingTextField;
+import openfl.events.Event;
 import openfl.filters.GlowFilter;
-import openfl.text.TextField;
+import openfl.Lib;
 import openfl.text.TextFormat;
 
 /**
@@ -17,7 +16,7 @@ import openfl.text.TextFormat;
  * @author Leo Bergman
  */
 class OFLTextComponent extends Component {
-    public var textField(default, null):TextField;
+    public var textField(default, null):ScalingTextField;
     var _format:Null<TextFormat>;
     var _text:String;
     var _selectable:Bool;
@@ -29,7 +28,7 @@ class OFLTextComponent extends Component {
 
     public function new(config:TextConfig) {
         componentType = ComponentType.Text;
-        textField = new TextField();
+        textField = new ScalingTextField();
         if (config.backgroundColor != null) {
             textField.background = true;
             textField.backgroundColor = config.backgroundColor;
@@ -43,6 +42,7 @@ class OFLTextComponent extends Component {
         _format = new TextFormat(config.font, config.size, config.color);
         _format.align = config.align;
         _text = config.text != null ? config.text : '';
+        config.scaleToFit = config.scaleToFit == null ? true : config.scaleToFit;
         _config = config;
         _selectable = config.selectable;
     }
@@ -69,11 +69,16 @@ class OFLTextComponent extends Component {
         }
         _stageSize = {x:textField.parent.width, y:textField.parent.height};
         onResize();
+        if(_config.scaleToFit){
+            textField.scaleToFit();
+        }
     }
 
     override public function update(delta:Float) {
+        var textChanged = false;
         if (textField.text != _model.text) {
             textField.text = _model.text;
+            textChanged = true;
         }
         var formatChanged = false;
         if (_config.font != _model.font) {
@@ -110,6 +115,11 @@ class OFLTextComponent extends Component {
         _lastW = _model.width;
         _lastH = _model.height;
         textField.visible = _model.visible;
+        if(textChanged || formatChanged) {
+            if(_config.scaleToFit){
+                textField.scaleToFit();
+            }
+        }
     }
     override public function dispose() {
         if(textField.parent != null) {
