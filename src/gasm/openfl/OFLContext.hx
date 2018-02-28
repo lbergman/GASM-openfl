@@ -40,10 +40,6 @@ class OFLContext extends Sprite implements Context {
         }
     }
 
-    function resize(width:Float, height:Float) {
-        // Override in subclass
-    }
-
     function onEnterFrame(e:Event):Void {
         _engine.tick();
     }
@@ -54,9 +50,9 @@ class OFLContext extends Sprite implements Context {
     }
 
     function onResize(?e:Event) {
-        resize(stage.stageWidth, stage.stageHeight);
         appModel.stageSize.x = stage.stageWidth;
         appModel.stageSize.y = stage.stageHeight;
+        appModel.resizeSignal.emit({width:appModel.stageSize.x, height:appModel.stageSize.y});
     }
 
     function init() {
